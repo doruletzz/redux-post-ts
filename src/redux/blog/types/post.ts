@@ -12,15 +12,17 @@ export interface PostState {
 
 export type PostAction = {
     type: string
-    posts: Array<Post>
+    data: Array<Post>
   }
 
-export type Post = {
+export interface Post {
+    id : number,
+    slug : string,
     title: string,
     summary: string,
+    content: string,
+    user: string,
     createdAt?: Date | undefined,
     updatedAt?: Date | undefined,
-    user: string,
-    content: string,
-    slug : string,
 }
+

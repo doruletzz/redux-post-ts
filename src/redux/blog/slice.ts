@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {Post, PostAction, PostFetchError, PostState} from './types/post'
+import { Post, PostAction, PostFetchError, PostState } from './types/post'
 
-import {receivePosts} from './postsUtils'
+import { receivePosts } from './utils'
 import { AppThunk } from '../app/store';
 
 export type DispatchType = (args: PostAction) => PostAction
 
-const initialState : PostState = {
+const initialState: PostState = {
     isFetching: false,
     isError: false,
-    error: {message: ""},
-    posts: [] ,
-} ;
+    error: { message: "" },
+    posts: [],
+};
 
 
 export const postSlice = createSlice({
@@ -31,24 +31,21 @@ export const postSlice = createSlice({
         postsFailed: (state, action: PayloadAction<PostFetchError>) => {
             state.error = action.payload;
             state.isFetching = false;
-        }
+        },
 
     }
 })
 
-const POST_COUNT = 10;
-
 const { actions, reducer } = postSlice
 
-export const { postsReceived,  postsFetching, postsFailed } = actions
+export const { postsReceived, postsFetching, postsFailed } = actions
 
 export default reducer
 
-
 // Actions
-export const fetchPosts = (count : number) : AppThunk => {
-    return async (dispatch)  => {
-        try{
+export const fetchPosts = (count: number): AppThunk => {
+    return async (dispatch) => {
+        try {
             dispatch(postsFetching());
             const posts = receivePosts(count);
             dispatch(postsReceived(posts))
@@ -56,6 +53,18 @@ export const fetchPosts = (count : number) : AppThunk => {
             dispatch(postsFailed(error));
         }
     }
-    
+}
+
+export const fetchPost = (slug : string) : AppThunk => {
+    return async (dispatch) => {
+        try {
+            dispatch(postsFetching());
+            const posts = receivePosts(1, {slug});
+            console.log(posts);
+            dispatch(postsReceived(posts))
+        } catch (error) {
+            dispatch(postsFailed(error));
+        }
+    }
 }
 

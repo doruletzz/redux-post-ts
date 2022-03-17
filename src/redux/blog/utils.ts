@@ -1,7 +1,7 @@
 import faker from '@faker-js/faker';
 import { Dispatch } from '@reduxjs/toolkit';
 
-import { Post, PostAction, PostFetchError } from './types/post'
+import { Post,  PostAction, PostFetchError } from './types/post'
 
 const {
     date: { past },
@@ -14,8 +14,7 @@ type OptionsType = {
     slug?: string
 }
 
-const POST_COUNT = 10;
-
+// function simulates post fetch
 export const receivePosts = (count: number = 1, options: OptionsType = {}): Array<Post> => {
 
     const posts = Array<Post>(count)
@@ -24,14 +23,14 @@ export const receivePosts = (count: number = 1, options: OptionsType = {}): Arra
             const summary = paragraph();
             return {
                 id: options.id || uuid().split('-')[0],
+                user: words(),
+                slug: options.slug || slug(),
                 title: words(),
                 summary,
                 content: `${summary}\n${paragraphs()}`,
                 date: past(),
                 createdAt: past(),
                 updatedAt: past(),
-                slug: options.slug || slug(),
-                user: words()
             } as Post;
         });
 
@@ -39,6 +38,4 @@ export const receivePosts = (count: number = 1, options: OptionsType = {}): Arra
         throw { message: "Fetch Unsuccesful" }
 
     return posts;
-
-
 }

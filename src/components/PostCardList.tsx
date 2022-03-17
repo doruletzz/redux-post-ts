@@ -2,32 +2,37 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { usePostDispatch, usePostSelector } from '../redux/app/hooks';
 
-import { Container, Button, Card, Row, Col} from 'react-bootstrap'
+import { Container, Button, Card, Row, Col } from 'react-bootstrap'
 
 
-import { receivePosts } from '../redux/blog/postsUtils';
-import { fetchPosts } from '../redux/blog/postsSlice';
+import { fetchPosts } from '../redux/blog/slice';
+import { Link } from 'react-router-dom';
 
-const PostCardList = ({ count }) => {
-    
-    const posts = usePostSelector(state => state.posts.posts);
+type PostCardListParamType = {
+    count: number;
+}
+
+const PostCardList = ({ count }: PostCardListParamType) => {
+
+    const data = usePostSelector(state => state.posts);
 
     const dispatch = usePostDispatch();
-
 
 
     return (
         <>
             <Container fluid className="pt-2">
-                {posts.map(({ title, summary, createdAt, slug }, idx) => (
+                {data.posts.map(({ title, summary, createdAt, slug }, idx) => (
                     <Row key={idx} className="mt-4">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>{title}</Card.Title>
-                                <Card.Subtitle>{createdAt.toString()}</Card.Subtitle>
-                                <Card.Text>{summary}</Card.Text>
-                            </Card.Body>
-                        </Card>
+                        <Link to={`/blog/${slug}`}>
+                            <Card>
+                                <Card.Body>
+                                    <Card.Title>{title}</Card.Title>
+                                    <Card.Subtitle>{createdAt.toString()}</Card.Subtitle>
+                                    <Card.Text>{summary}</Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Link>
                     </Row>
                 ))}
 
